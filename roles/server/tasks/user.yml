@@ -1,0 +1,24 @@
+- name: Add create group "cldinf"
+  group:
+    name: cldinf
+
+- name: Allow group 'cldinf' sudo without password  
+  linefile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%cldinf'
+    line: '%cldinf ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add user to group 'cldinf'
+  user:
+    name: cldinf
+    comment: "Service User for Kanban Application"
+    group: cldinf
+    append: yes
+    shell: /bin/bash
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+
+       

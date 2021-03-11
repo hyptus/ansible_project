@@ -1,0 +1,36 @@
+- name: Install Docker
+  tags: install
+  apt:
+    pkg:
+      name:
+        - docker
+        - docker-compose
+        - docker.io
+      state: latest  
+
+- name: Move cldinf to Docker Group
+  tags: install
+  user:
+    name: 'cldinf'
+    group: 'docker'
+    append: yes
+
+- name: Set folder permission for docker
+  become: yes
+  file:
+    path: "/home/cldinf/.docker"
+    recurse: yes
+    owner: "cldinf"
+    group: "cldinf"
+    mode: 0775
+
+
+- name: Uninstall Docker
+  tags: uninstall, never
+  apt:
+    package: 
+      name:
+      - docker
+      - docker-compose
+      - docker.io
+      state: absent
